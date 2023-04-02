@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <title>Document</title>
+</head>
+<body>
+    <header></header>
+    <div>
+        <h2 id="titulo">Cadastro</h2>
+        <input id="Usuario" type="text" placeholder="Digite O Nome De Usuário">
+        <input id="Senha" type="text" placeholder="Digite A Senha">
+        <input id="Confirmacao" type="text" placeholder="Confime A Senha">
+        <button id="botao">Enviar</button>
+        <h3 id="res"></h3>
+        <button id="Sim" style="display: none">Sim</button>
+        <button id="Nao" style="display: none">Não</button>
+    </div>
+    <footer></footer>
+    <script>
+        let contas = [{}];
+        
+        var User = document.getElementById("Usuario");
+        var Senha = document.getElementById("Senha");
+        var res = document.getElementById("res");
+        var Sim = document.getElementById('Sim');
+        var Nao = document.getElementById('Nao');
+        var botao = document.getElementById('botao');
+        var contas_copia = JSON.parse(JSON.stringify(contas));
+        var j = 0;
+        
+        botao.addEventListener('click', () => j == 0 ? cadastro() : login())
+        Sim.addEventListener('click', () => j == 0 ? logar() : criar())
+        Nao.addEventListener('click', () => j == 0 ? criar() : logar())
+
+        function login() {
+            for (var i = 0; i < contas.length; i++) {
+                if (contas[i].tag === User.value && contas[i].Senha === Senha.value) {
+                    Sim.style.display, Nao.style.display = 'none';
+                    res.innerHTML = `Bem Vindo ${User.value}`;
+                } else if(User.value === '' || Senha.value === '') {
+                    res.innerHTML = 'Dados Incompletos';
+                } else if (contas[i].tag !== User.value) {
+                    res.innerHTML = 'Essa Conta Não Existe, Gostaria De Criar Uma ?'
+                    Sim.style.display, Nao.style.display = "Inline-block";
+                } else if (contas[i].Senha !== Senha.value) {
+                    res.innerHTML = 'Senha Incorreta';
+                } 
+            }
+        }
+
+        function cadastro() {
+            for (var i = 0; i < contas.length; i++) {
+                if (User.value === '' || Senha.value === '' || Confirmacao.value === '') {
+                    res.innerHTML = 'Dados Incompletos';
+                } else if (contas[i].tag === User.value) {
+                    res.innerHTML = 'Conta Já Existente, Gostaria De Fazer Login ?';
+                    Sim.style.display, Nao.style.display = 'Inline-block';
+                } else {
+                    res.innerHTML = 'Conta Criada Com Sucesso, Gostaria De Fazer Login ?';
+                    contas.push({tag: User.value, Senha: Senha.value});
+                    Sim.style.display, Nao.style.display = 'Inline-block';
+                    break
+                }
+            }
+        }
+
+        var titulo = document.getElementById('titulo');
+        var Confirmacao = document.getElementById('Confirmacao');
+
+        function criar() {
+            titulo.innerHTML = 'Cadastro';
+            User.value, Senha.value, res.innerHTML = '';
+            Confirmacao.style.display = 'Inline-block';
+            Sim.style.display, Nao.style.display = 'none';
+            j = 0;
+        }
+
+        function logar() {
+            titulo.innerHTML = 'Login';
+            User.value, Senha.value, Confirmacao.value, res.innerHTML = '';
+            Confirmacao.style.display, Sim.style.display, Nao.style.display = 'none';
+            j = 1;
+        }
+    </script>
+</body>
+</html>
